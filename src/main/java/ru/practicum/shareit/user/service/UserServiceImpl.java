@@ -40,32 +40,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(int id, UserDto userDto) {
-        int userId = Math.toIntExact(id);
-
-        getUserById(id);
-
-        User user = users.get(userId);
+        UserDto user = getUserById(id);
         user.setName(userDto.getName());
 
-        if (userDto.getEmail() != null && isEmailAlreadyUsed(userDto.getEmail(), userId)) {
+        if (userDto.getEmail() != null && isEmailAlreadyUsed(userDto.getEmail(), id)) {
             throw new IllegalArgumentException("Email уже используется: " + userDto.getEmail());
         }
 
         if (userDto.getEmail() != null) {
             user.setEmail(userDto.getEmail());
         }
-        users.put(userId, user);
+        users.put(id, userMapper.toUser(user));
         log.info("Пользователь обновлен: {}", user);
 
-        return userMapper.toUserDto(user);
+        return user;
     }
 
     @Override
     public UserDto getUserById(int id) {
-        User user = users.get(id);
-        if (user == null) {
-            throw new NotFoundException("Пользователь не найден");
-        }
+        User user = findUser(id);
         log.info("Пользователь получен по ID: {}", id);
         return userMapper.toUserDto(user);
     }
@@ -82,6 +75,14 @@ public class UserServiceImpl implements UserService {
         getUserById(id);
         users.remove(id);
         log.info("Пользователь удален с ID: {}", id);
+    }
+
+    private User findUser(int id) {
+        User user = users.get(id);
+        if (user == null) {
+            throw new NotFoundException("Пользователь не найден");
+        }
+        return user;
     }
 
     private boolean isEmailAlreadyUsed(String email, int currentUserId) {

@@ -7,7 +7,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.service.UserServiceImpl;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,11 +21,11 @@ public class ItemServiceImpl implements ItemService {
 
     private final Map<Integer, Item> items = new HashMap<>();
     private final ItemMapper itemMapper;
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
     private int itemIdCounter = 1;
 
     public ItemDto createItem(int userId, ItemDto itemDto) {
-        userServiceImpl.getUserById(userId);
+        userService.getUserById(userId);
         itemDto.setId(itemIdCounter++);
         itemDto.setOwnerId(userId);
         items.put(itemDto.getId(), itemMapper.toItem(itemDto));
@@ -74,7 +74,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAllItemsByUserId(int userId) {
-        userServiceImpl.getUserById(userId);
+        userService.getUserById(userId);
         return items.values().stream()
                 .filter(item -> item.getOwnerId() == userId)
                 .map(itemMapper::toItemDto)
