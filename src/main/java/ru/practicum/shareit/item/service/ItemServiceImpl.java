@@ -7,11 +7,11 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,18 +19,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    private final Map<Integer, Item> items = new HashMap<>();
     private final ItemMapper itemMapper;
     private final UserService userService;
-    private int itemIdCounter = 1;
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     public ItemDto createItem(int userId, ItemDto itemDto) {
         userService.getUserById(userId);
-        itemDto.setId(itemIdCounter++);
         itemDto.setOwnerId(userId);
-        items.put(itemDto.getId(), itemMapper.toItem(itemDto));
+        itemRepository.save(itemMapper.toItem(itemDto));
         log.info("Предмет создан: {}", itemDto);
-
         return itemDto;
     }
 
@@ -65,18 +63,16 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getItemById(int itemId) {
-        Item item = items.get(itemId);
-        if (item == null) {
-            throw new NotFoundException("Предмет с ID " + itemId + " не найден");
-        }
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Предмет с ID " + itemId + " не найден"));
         return itemMapper.toItemDto(item);
     }
 
     @Override
     public List<ItemDto> getAllItemsByUserId(int userId) {
         userService.getUserById(userId);
-        return items.values().stream()
-                .filter(item -> item.getOwnerId() == userId)
+        itemRepository.findAllByOwnerId();
+        return itemRepository.findAll().stream()
+                .filter(item -> item.get == userId)
                 .map(itemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
