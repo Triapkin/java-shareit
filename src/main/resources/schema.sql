@@ -1,9 +1,4 @@
-DROP TABLE IF EXISTS bookings;
-
-DROP TABLE IF EXISTS items CASCADE;
-
-DROP TABLE IF EXISTS comments CASCADE;
-
+DROP TABLE IF EXISTS requests, comments,bookings,items, users;
 
 CREATE TABLE IF NOT EXISTS users
 (
