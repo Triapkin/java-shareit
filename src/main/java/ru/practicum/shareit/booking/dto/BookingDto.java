@@ -1,14 +1,12 @@
 package ru.practicum.shareit.booking.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.user.dto.UserDto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * TODO Sprint add-bookings.
@@ -16,14 +14,12 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class BookingDto {
-    int id;
-    @NotNull(message = "Дата старта не может быть пустой")
-    @JsonFormat(pattern = ("yyyy-MM-dd"))
-    LocalDate start;
-    @NotNull(message = "Дата конца не может быть пустой")
-    @JsonFormat(pattern = ("yyyy-MM-dd"))
-    LocalDate end;
-    Item item;
-    User booker;
-    BookingStatus status;
+    private int id;
+    private int itemId;
+    private int bookerId;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private BookingStatus status;
+    private ItemDto item;
+    private UserDto booker;
 }
