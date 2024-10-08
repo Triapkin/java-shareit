@@ -119,9 +119,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void validateTimeBooking(BookingDto bookingDto) {
-        if (bookingDto.getStart() == null || bookingDto.getEnd() == null) {
-            throw new ValidationException("Поля не могут быть пустыми");
-        }
         if (bookingDto.getStart().isEqual(bookingDto.getEnd())) {
             throw new ValidationException("Дата начала бронирования не может совпадать с датой окончания!");
         }

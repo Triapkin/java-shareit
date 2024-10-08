@@ -46,7 +46,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto updateItem(int userId, int itemId, ItemDto itemDto) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("пользователь не найден"));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Итем не найден"));
 
         if (item == null) {
             throw new NotFoundException("Предмет с ID " + itemId + " не найден");
