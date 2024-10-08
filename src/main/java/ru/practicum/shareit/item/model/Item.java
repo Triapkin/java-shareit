@@ -15,8 +15,11 @@ public class Item {
     private int id;
     private String name;
     private String description;
+    @Column(name = "is_available")
     private Boolean available;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User ownerId;
+    @JoinColumn(name = "owner_id")
+    @ManyToOne
+    private User owner;
+    @JoinColumn(name = "request_id")
     private int requestId;
 }

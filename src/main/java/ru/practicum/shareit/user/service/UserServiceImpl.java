@@ -34,10 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(int id, UserDto userDto) {
-        UserDto user = getUserById(id);
-        user.setName(userDto.getName());
+        User user = userMapper.toUser(getUserById(id));
 
-        if (userDto.getEmail() != null && isEmailAlreadyUsed(userDto.getEmail(), id)) {
+        if (userDto.getEmail() != null && isEmailAlreadyUsed(userDto.getEmail(), user.getId())) {
             throw new IllegalArgumentException("Email уже используется: " + userDto.getEmail());
         }
 
@@ -48,10 +47,10 @@ public class UserServiceImpl implements UserService {
         if (userDto.getEmail() != null) {
             user.setEmail(userDto.getEmail());
         }
-        userRepository.save(userMapper.toUser(user));
+        userRepository.save(user);
         log.info("Пользователь обновлен: {}", user);
 
-        return user;
+        return userMapper.toUserDto(user);
     }
 
     @Override
