@@ -19,7 +19,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 public class ItemController {
 
     private final ItemClient itemClient;
-    private final static String HEADER_PREFIX = "X-Sharer-User-Id";
+    private static final String HEADER_PREFIX = "X-Sharer-User-Id";
 
     @PostMapping
     public ResponseEntity<Object> createItem(
