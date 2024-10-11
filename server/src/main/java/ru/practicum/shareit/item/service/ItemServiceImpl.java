@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.ItemNotAvailableException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -20,6 +21,7 @@ import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -100,19 +102,19 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto addComment(int itemId, CommentDto commentDto, int userId) {
-        if (!bookingRepository.existsByBookerIdAndItemIdPast(userId, itemId)) {
-            throw new ItemNotAvailableException("Not allowed for current booking");
+        Optional<Booking> booking = bookingRepository.findBookingByItemIdAndBookerId(itemId, userId);
+        if (booking.get().getEnd().isAfter(LocalDateTime.now().minusSeconds(1))) {
+            log.warn("Пользователь id = {} ещё не закончил аренду вещи id = {}", userId, itemId);
+            throw new ItemNotAvailableException("Оставить отзыв можно только после окончания аренды.");
         }
 
-        Comment comment = new Comment();
-
+        Comment comment = commentMapper.toComment(commentDto);
         comment.setItem(itemMapper.toItem(getItemById(itemId)));
         comment.setAuthor(userRepository.findById(userId).get());
         comment.setText(commentDto.getText());
         comment.setCreated(LocalDateTime.now());
-        comment = commentRepository.save(comment);
 
-        return commentMapper.toCommentDto(comment);
+        return commentMapper.toCommentDto(commentRepository.save(comment));
     }
 
     @Override

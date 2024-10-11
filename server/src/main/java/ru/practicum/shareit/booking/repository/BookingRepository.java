@@ -7,6 +7,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
     List<Booking> findBookingsByBooker_IdOrderByStartDesc(int bookerId);
@@ -35,7 +36,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query("SELECT (COUNT(b) > 0) FROM Booking b " +
             "WHERE b.booker.id = :bookerId " +
             "AND b.item.id = :itemId " +
-            "AND b.end <= CURRENT_TIMESTAMP")
+            "AND b.start < CURRENT_TIMESTAMP")
     boolean existsByBookerIdAndItemIdPast(int bookerId, int itemId);
 
     @Query(value = "SELECT b FROM Booking b " +
@@ -74,4 +75,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "ORDER BY b.start DESC")
     List<Booking> findAllBookingsByOwnerId(int ownerId, Status status);
 
+
+    Optional<Booking> findBookingByItemIdAndBookerId(int itemId, int userId);
 }
+

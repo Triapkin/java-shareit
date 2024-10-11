@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS comments
     text      VARCHAR(255) NOT NULL,
     item_id   integer       NOT NULL,
     author_id integer       NOT NULL,
-    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (item_id) REFERENCES items (id),
     FOREIGN KEY (author_id) REFERENCES users (id)
     );

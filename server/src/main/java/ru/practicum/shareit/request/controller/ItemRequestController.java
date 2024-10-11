@@ -24,7 +24,6 @@ public class ItemRequestController {
 
     @GetMapping
     public List<ItemRequestDto> getByUserId(@RequestHeader("X-Sharer-User-Id") int userId) {
-        log.info("Получен запрос к эндпоинту /requests getForUser с headers {}", userId);
         return requestService.getByUserId(userId);
     }
 
