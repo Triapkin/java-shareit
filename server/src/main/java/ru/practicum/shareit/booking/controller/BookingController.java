@@ -1,7 +1,5 @@
 package ru.practicum.shareit.booking.controller;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,7 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookingDto addBookingRequest(@Valid @RequestBody BookingDto bookingDto,
+    public BookingDto addBookingRequest(@RequestBody BookingDto bookingDto,
                                         @RequestHeader("X-Sharer-User-Id") int userId) {
         log.info("Добавлен новый запрос: {}", bookingDto);
         return bookingService.addBooking(userId, bookingDto);
@@ -30,7 +28,7 @@ public class BookingController {
     @PatchMapping("/{bookingId}")
     public BookingDto approve(@PathVariable int bookingId,
                               @RequestHeader("X-Sharer-User-Id") int bookerId,
-                              @RequestParam @NotNull Boolean approved) {
+                              @RequestParam Boolean approved) {
         return bookingService.approve(bookingId, bookerId, approved);
     }
 
