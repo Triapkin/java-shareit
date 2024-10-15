@@ -24,13 +24,10 @@ import java.util.stream.Collectors;
 public class ItemRequestServiceImpl implements ItemRequestService {
 
     private final ItemRequestRepository requestRepository;
-    private final ItemMapper itemMapper;
     private final UserService userService;
     private final ItemRequestMapper itemRequestMapper;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
-    private final ItemService itemService;
-    private final ItemServiceImpl itemServiceImpl;
     private final ItemRequestRepository itemRequestRepository;
 
     @Override
