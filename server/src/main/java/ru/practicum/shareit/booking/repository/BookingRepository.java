@@ -33,12 +33,6 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     List<Booking> findBookingsByBooker_IdAndStatusOrderByStartDesc(int bookerId, Status status);
 
-    @Query("SELECT (COUNT(b) > 0) FROM Booking b " +
-            "WHERE b.booker.id = :bookerId " +
-            "AND b.item.id = :itemId " +
-            "AND b.start < CURRENT_TIMESTAMP")
-    boolean existsByBookerIdAndItemIdPast(int bookerId, int itemId);
-
     @Query(value = "SELECT b FROM Booking b " +
             "JOIN Item i ON i.id = b.item.id  " +
             "WHERE i.owner.id = :ownerId " +

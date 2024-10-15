@@ -31,6 +31,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     private final ItemRepository itemRepository;
     private final ItemService itemService;
     private final ItemServiceImpl itemServiceImpl;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Override
     public ItemRequestDto addRequest(int userId, ItemRequestDto requestDto) {
@@ -61,5 +62,10 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         itemRequestDto.setItems(itemRepository.findAllByRequestId(requestId));
 
         return itemRequestDto;
+    }
+
+    @Override
+    public List<ItemRequestDto> getALlRequests() {
+        return itemRequestMapper.toItemRequestDto(itemRequestRepository.findAllByOrderByCreatedDesc());
     }
 }

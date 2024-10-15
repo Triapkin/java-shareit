@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class BookingController {
-    BookingService bookingService;
+    private final BookingService bookingService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

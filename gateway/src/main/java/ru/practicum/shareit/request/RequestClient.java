@@ -37,4 +37,8 @@ public class RequestClient extends BaseClient {
     public ResponseEntity<Object> getRequestById(int requestId) {
         return get("/" + requestId);
     }
+
+    public ResponseEntity<Object> getAllRequests() {
+        return get("/all");
+    }
 }

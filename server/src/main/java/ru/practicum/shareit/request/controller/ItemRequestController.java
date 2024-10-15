@@ -22,6 +22,11 @@ public class ItemRequestController {
         return requestService.addRequest(userId, dto);
     }
 
+    @GetMapping("/all")
+    public List<ItemRequestDto> getALlRequests() {
+        return requestService.getALlRequests();
+    }
+
     @GetMapping
     public List<ItemRequestDto> getByUserId(@RequestHeader("X-Sharer-User-Id") int userId) {
         return requestService.getByUserId(userId);
